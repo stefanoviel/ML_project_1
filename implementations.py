@@ -215,20 +215,18 @@ def reg_logistic_regression(y, tx, initial_w, gamma, max_iters, lambda_):
     
     w = initial_w
 
-    pred = sigmoid(tx.dot(w))  # initial predictions
-    loss = (1/(2*len(tx))) *  np.sum((y - pred)** 2)
+    sigmoids, loss = compute_logistic_loss(y, tx, w)
 
     
     for iter in range(max_iters):
 
         # compute the gradient
-        grad = tx.T.dot(pred - y) + 2 * lambda_ * w
+        grad = tx.T.dot(sigmoids - y) + 2 * lambda_ * w
 
         # update w through the negative gradient direction
         w = w - gamma * grad
 
-        pred = np.dot(tx, w)
-        loss = (1/(2*len(tx))) *  np.sum((y - pred)** 2)
+        sigmoids, loss = compute_logistic_loss(y, tx, w)
         
     return w, loss
 
