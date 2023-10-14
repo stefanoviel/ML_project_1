@@ -18,7 +18,7 @@ def compute_mse(y, tx, w):
     # pred = np.dot(tx, w)
     # return 0.5 * (1/len(tx)) *  np.sum((y - pred)** 2)
 
-    # nn
+    # nn  dsds
     e = y - np.dot(tx, w)  
     squared_error = np.square(e)
     mse = 0.5 * np.mean(squared_error)
