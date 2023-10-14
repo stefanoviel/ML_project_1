@@ -51,9 +51,21 @@ def mean_squared_error_gd(y, tx, initial_w, max_iters, gamma):
         
         weights = weights - gamma*gradient  # update weights
 
-    return loss, weights
+    return  weights, loss
 
 
+# y = np.array([[0.1],
+#        [0.3],
+#        [0.5]]), 
+
+# tx = np.array([[2.3, 3.2],
+#        [1. , 0.1],
+#        [1.4, 2.3]])
+
+
+# expected_w = np.array([[0.413044], [0.875757]])
+
+# print(mean_squared_error_gd(y, tx, expected_w, 0, 0.5))
 
 
 
