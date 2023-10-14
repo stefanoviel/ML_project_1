@@ -193,7 +193,7 @@ def compute_logistic_reg_loss(y, tx, w, lambda_):
 
     pred = np.dot(tx, w)
     sigmoids = 1.0 / (1 + np.exp(-pred))
-    loss = -np.mean(y * np.log(sigmoids) + (1 - y) * np.log(1 - sigmoids)) + (lambda_ / 2) * np.linalg.norm(w)**2
+    loss = -np.mean(y * np.log(sigmoids) + (1 - y) * np.log(1 - sigmoids)) + (lambda_ / 2) * np.dot(w, w)
     return sigmoids, loss
 
 
