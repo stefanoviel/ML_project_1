@@ -186,7 +186,6 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma):
 
 
 
-print(logistic_regression(y, tx, initial_w, 0 , GAMMA))
 
 def reg_logistic_regression(y, tx, initial_w, gamma, max_iters, lambda_):
     """
