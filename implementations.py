@@ -75,7 +75,7 @@ def mean_squared_error_sgd(y, tx, initial_w, max_iters, gamma):
         weights = weights - gamma*gradient # update weights
 
 
-    return loss, weights
+    return weights, loss
 
 
 
@@ -188,6 +188,7 @@ def reg_logistic_regression(y, tx, initial_w, gamma, max_iters, lambda_):
     """
     
     w = initial_w
+    loss = (1/(2*len(tx))) *  np.sum((y - pred)** 2)
 
     pred = sigmoid(tx.dot(w))  # initial predictions
     
