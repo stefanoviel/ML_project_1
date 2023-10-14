@@ -145,7 +145,7 @@ def compute_logistic_loss(y, tx, w):
 
     pred = np.dot(tx, w)
     sigmoids = 1.0 / (1 + np.exp(-pred))
-    loss =  -np.mean(y * np.log(sigmoids) + (1 - y) * np.log(1 - sigmoids)), 
+    loss = -np.mean(y * np.log(sigmoids) + (1 - y) * np.log(1 - sigmoids))
     return sigmoids, loss
 
 
@@ -183,9 +183,7 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma):
         # update w through the negative gradient direction
         w = w - gamma * grad
 
-        pred = np.dot(tx, w)
-        sigmoids = 1.0 / (1 + np.exp(-pred))        
-        loss = -np.mean(y * np.log(sigmoids) + (1 - y) * np.log(1 - sigmoids))
+        sigmoids, loss = compute_logistic_loss(y, tx, w)
         
     return w, loss
 
