@@ -53,28 +53,6 @@ def mean_squared_error_gd(y, tx, initial_w, max_iters, gamma):
 
     return  weights, loss
 
-MAX_ITERS = 2
-GAMMA = 0.1
-
-# y = np.array([[0.1],
-#        [0.3],
-#        [0.5]])
-
-y = np.array([[0.],
-       [1.],
-       [1.]])
-
-tx = np.array([[2.3, 3.2],
-       [1. , 0.1],
-       [1.4, 2.3]])
-
-initial_w = np.array([[0.5],
-       [1. ]])
-
-# expected_w = np.array([[0.413044], [0.875757]])
-
-# print(mean_squared_error_gd(y, tx, initial_w, MAX_ITERS, GAMMA))
-
 
 
 
@@ -195,12 +173,13 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma):
     for iter in range(max_iters):
         # compute the gradient
         pred = np.dot(tx, w)
-        grad =  tx.T.dot(pred - y)/len(tx)
+        sigmoids = 1.0 / (1 + np.exp(-pred))
+        grad =  tx.T.dot(sigmoids - y)/len(tx)
 
         # update w through the negative gradient direction
         w = w - gamma * grad
 
-        sigmoids = 1.0 / (1 + np.exp(-pred))
+        
         loss = -np.mean(y * np.log(sigmoids) + (1 - y) * np.log(1 - sigmoids))
         
     return w, loss
