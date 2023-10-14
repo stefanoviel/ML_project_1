@@ -56,9 +56,13 @@ def mean_squared_error_gd(y, tx, initial_w, max_iters, gamma):
 MAX_ITERS = 2
 GAMMA = 0.1
 
-y = np.array([[0.1],
-       [0.3],
-       [0.5]])
+# y = np.array([[0.1],
+#        [0.3],
+#        [0.5]])
+
+y = np.array([[0.],
+       [1.],
+       [1.]])
 
 tx = np.array([[2.3, 3.2],
        [1. , 0.1],
@@ -159,6 +163,8 @@ def sigmoid(t):
     return 1.0 / (1 + np.exp(-t))
 
 
+
+
 def logistic_regression(y, tx, initial_w, max_iters, gamma):
     """
     Perform logistic regression using gradient descent.
@@ -181,23 +187,27 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma):
     """
     
     w = initial_w
-    pred = sigmoid(tx.dot(w))
-    loss = (1/(2*len(tx))) *  np.sum((y - pred)** 2)
+
+    pred = np.dot(tx, w)
+    sigmoids = 1.0 / (1 + np.exp(-pred))
+    loss = -np.mean(y * np.log(sigmoids) + (1 - y) * np.log(1 - sigmoids))
     
     for iter in range(max_iters):
         # compute the gradient
-        grad =  tx.T.dot(pred - y)
+        pred = np.dot(tx, w)
+        grad =  tx.T.dot(pred - y)/len(tx)
 
         # update w through the negative gradient direction
         w = w - gamma * grad
 
-        pred = sigmoid(tx.dot(w))
-        loss = (1/(2*len(tx))) *  np.sum((y - pred)** 2)
-
+        sigmoids = 1.0 / (1 + np.exp(-pred))
+        loss = -np.mean(y * np.log(sigmoids) + (1 - y) * np.log(1 - sigmoids))
         
     return w, loss
 
 
+
+print(logistic_regression(y, tx, initial_w, 0 , GAMMA))
 
 def reg_logistic_regression(y, tx, initial_w, gamma, max_iters, lambda_):
     """
