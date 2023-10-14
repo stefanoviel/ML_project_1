@@ -164,7 +164,7 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma):
 
 
 
-def logistic_regression_regularized(y, tx, initial_w, max_iters, gamma, lambda_):
+def reg_logistic_regression(y, tx, initial_w, max_iters, gamma, lambda_):
     """
     Perform regularized logistic regression using gradient descent.
     
