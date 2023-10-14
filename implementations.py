@@ -53,19 +53,19 @@ def mean_squared_error_gd(y, tx, initial_w, max_iters, gamma):
 
     return  weights, loss
 
-# MAX_ITERS = 2
-# GAMMA = 0.1
+MAX_ITERS = 2
+GAMMA = 0.1
 
-# y = np.array([[0.1],
-#        [0.3],
-#        [0.5]])
+y = np.array([[0.1],
+       [0.3],
+       [0.5]])
 
-# tx = np.array([[2.3, 3.2],
-#        [1. , 0.1],
-#        [1.4, 2.3]])
+tx = np.array([[2.3, 3.2],
+       [1. , 0.1],
+       [1.4, 2.3]])
 
-# initial_w = np.array([[0.5],
-#        [1. ]])
+initial_w = np.array([[0.5],
+       [1. ]])
 
 # expected_w = np.array([[0.413044], [0.875757]])
 
@@ -96,7 +96,8 @@ def mean_squared_error_sgd(y, tx, initial_w, max_iters, gamma):
     loss = compute_mse(y, tx, weights)
 
     for n_iter in range(max_iters):
-        n = random.randint(0,len(tx))
+        n = random.randint(0, len(tx) - 1)
+        print(tx.shape, 1)
         gradient = tx[n] * (y[n] - tx[n] @ weights) # compute gradient
         
         
@@ -105,6 +106,9 @@ def mean_squared_error_sgd(y, tx, initial_w, max_iters, gamma):
 
 
     return weights, loss
+
+
+
 
 
 
