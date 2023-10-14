@@ -36,6 +36,8 @@ def mean_squared_error_gd(y, tx, initial_w, max_iters, gamma):
     """
 
     weights = initial_w
+    loss = compute_mse(y, tx, weights)
+    
     for n_iter in range(max_iters):
 
         error = y -  tx.dot(weights)
@@ -66,6 +68,7 @@ def mean_squared_error_sgd(y, tx, initial_w, max_iters, gamma):
     """
 
     weights = initial_w
+    loss = compute_mse(y, tx, weights)
 
     for n_iter in range(max_iters):
         n = random.randint(0,len(tx))
@@ -147,6 +150,7 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma):
     
     w = initial_w
     pred = sigmoid(tx.dot(w))
+    loss = (1/(2*len(tx))) *  np.sum((y - pred)** 2)
     
     for iter in range(max_iters):
         # compute the gradient
@@ -155,10 +159,9 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma):
         # update w through the negative gradient direction
         w = w - gamma * grad
 
-        pred = np.dot(tx, w)
+        pred = sigmoid(tx.dot(w))
         loss = (1/(2*len(tx))) *  np.sum((y - pred)** 2)
 
-        print(loss)
         
     return w, loss
 
