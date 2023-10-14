@@ -188,9 +188,10 @@ def reg_logistic_regression(y, tx, initial_w, gamma, max_iters, lambda_):
     """
     
     w = initial_w
-    loss = (1/(2*len(tx))) *  np.sum((y - pred)** 2)
 
     pred = sigmoid(tx.dot(w))  # initial predictions
+    loss = (1/(2*len(tx))) *  np.sum((y - pred)** 2)
+
     
     for iter in range(max_iters):
 
