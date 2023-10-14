@@ -227,7 +227,7 @@ def reg_logistic_regression(y, tx, lambda_,  initial_w, max_iters, gamma ):
     for iter in range(max_iters):
 
         # compute the gradient
-        grad = tx.T.dot(sigmoids - y)/len(y) + 2 * lambda_ * w
+        grad = tx.T.dot(sigmoids - y)/len(y) +  lambda_ * w
 
         # update w through the negative gradient direction
         w = w - gamma * grad
