@@ -15,8 +15,15 @@ def compute_mse(y, tx, w):
     Returns:
         the value of the loss (a scalar), corresponding to the input parameters w.
     """ 
-    pred = np.dot(tx, w)
-    return (1/(2*len(tx))) *  np.sum((y - pred)** 2)
+    # pred = np.dot(tx, w)
+    # return 0.5 * (1/len(tx)) *  np.sum((y - pred)** 2)
+
+    e = y - np.dot(tx, w)
+    squared_error = np.square(e)
+    mse = 0.5 * np.mean(squared_error)
+    return mse
+
+
 
 
 
@@ -37,7 +44,7 @@ def mean_squared_error_gd(y, tx, initial_w, max_iters, gamma):
 
     weights = initial_w
     loss = compute_mse(y, tx, weights)
-    
+
     for n_iter in range(max_iters):
 
         error = y -  tx.dot(weights)
@@ -47,6 +54,9 @@ def mean_squared_error_gd(y, tx, initial_w, max_iters, gamma):
         weights = weights - gamma*gradient  # update weights
 
     return loss, weights
+
+
+
 
 
 
