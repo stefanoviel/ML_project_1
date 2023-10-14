@@ -196,7 +196,7 @@ def compute_logistic_reg_loss(y, tx, w, lambda_):
     return sigmoids, loss
 
 
-def reg_logistic_regression(y, tx, initial_w, gamma, max_iters, lambda_):
+def reg_logistic_regression(y, tx, lambda_,  initial_w, max_iters, gamma ):
     """
     Perform regularized logistic regression using gradient descent.
     
@@ -227,7 +227,7 @@ def reg_logistic_regression(y, tx, initial_w, gamma, max_iters, lambda_):
     for iter in range(max_iters):
 
         # compute the gradient
-        grad = tx.T.dot(sigmoids - y) + 2 * lambda_ * w
+        grad = tx.T.dot(sigmoids - y)/len(y) + 2 * lambda_ * w
 
         # update w through the negative gradient direction
         w = w - gamma * grad
