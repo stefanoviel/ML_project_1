@@ -135,11 +135,11 @@ def sigmoid(t):
     return 1.0 / (1 + np.exp(-t))
 
 
-def compute_logistic_loss(y, tx, w): 
+def compute_logistic_loss(y, tx, w, lambda_): 
 
     pred = np.dot(tx, w)
     sigmoids = 1.0 / (1 + np.exp(-pred))
-    loss = -np.mean(y * np.log(sigmoids) + (1 - y) * np.log(1 - sigmoids))
+    loss = -0.5 * np.mean(y * np.log(sigmoids) + (1 - y) * np.log(1 - sigmoids)) + (lambda_ ) * np.linalg.norm(w) ** 2
     return sigmoids, loss
 
 
@@ -167,7 +167,7 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma):
     
     w = initial_w
 
-    sigmoids, loss = compute_logistic_loss(y, tx, w)
+    sigmoids, loss = compute_logistic_loss(y, tx, w, 0)
     
     for iter in range(max_iters):
         # compute the gradient
@@ -177,7 +177,7 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma):
         # update w through the negative gradient direction
         w = w - gamma * grad
 
-        sigmoids, loss = compute_logistic_loss(y, tx, w)
+        sigmoids, loss = compute_logistic_loss(y, tx, w, 0)
         
     return w, loss
 
@@ -232,12 +232,7 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma):
 #     return w, loss
 
 
-def compute_logistic_loss(y, tx, w, lambda_): 
 
-    pred = np.dot(tx, w)
-    sigmoids = 1.0 / (1 + np.exp(-pred))
-    loss = -0.5 * np.mean(y * np.log(sigmoids) + (1 - y) * np.log(1 - sigmoids)) + (lambda_ ) * np.linalg.norm(initial_w) ** 2
-    return sigmoids, loss
 
 def reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma):
 
