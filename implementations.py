@@ -232,24 +232,12 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma):
 #     return w, loss
 
 
-
-def compute_logistic_reg_loss(y, tx, w, lambda_): 
+def compute_logistic_loss(y, tx, w, lambda_): 
 
     pred = np.dot(tx, w)
     sigmoids = 1.0 / (1 + np.exp(-pred))
-    loss = -np.mean(y * np.log(sigmoids) + (1 - y) * np.log(1 - sigmoids) ) + (lambda_ / 2 ) * np.linalg.norm(initial_w) ** 2
+    loss = -0.5 * np.mean(y * np.log(sigmoids) + (1 - y) * np.log(1 - sigmoids)) + (lambda_ ) * np.linalg.norm(initial_w) ** 2
     return sigmoids, loss
-
-
-def compute_logistic_loss(y: np.ndarray, tx: np.ndarray, w: np.ndarray, lambda_: float = 0) -> float:
-
-    # Find the regularizer (if lambda != 0)
-    regularizer = lambda_ / 2 * (np.linalg.norm(tx) ** 2) if lambda_ else 0
-
-    summing = np.sum(np.log(1 + np.exp(tx.dot(w))))
-    y_component = y.T.dot(tx.dot(w)).flatten().flatten()
-
-    return summing - y_component + regularizer
 
 def reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma):
 
