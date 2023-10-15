@@ -204,7 +204,7 @@ def reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma):
         loss = compute_logistic_loss(y, tx, w, lambda_)
         
     
-    return w, loss.astype('float')
+    return w, np.array(loss).astype('float')
 
 
 
