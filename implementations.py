@@ -171,7 +171,6 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma):
     for iter in range(max_iters):
         # compute the gradient
 
-        print(w, loss)
         grad =  tx.T.dot(sigmoids - y)/len(tx)
 
         # update w through the negative gradient direction
