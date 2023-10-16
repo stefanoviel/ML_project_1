@@ -15,10 +15,7 @@ def compute_mse(y, tx, w):
     Returns:
         the value of the loss (a scalar), corresponding to the input parameters w.
     """ 
-    # pred = np.dot(tx, w)
-    # return 0.5 * (1/len(tx)) *  np.sum((y - pred)** 2)
 
-    # nn  dsds
     e = y - np.dot(tx, w)  
     squared_error = np.square(e)
     mse = 0.5 * np.mean(squared_error)
@@ -52,9 +49,6 @@ def mean_squared_error_gd(y, tx, initial_w, max_iters, gamma):
         loss = compute_mse(y, tx, weights)
 
     return  weights, loss
-
-
-
 
 
 
@@ -140,14 +134,13 @@ def sigmoid(t):
     """Apply the logistic function."""
     return 1.0 / (1 + np.exp(-t))
 
-
-def compute_logistic_loss(y, tx, w): 
+    
+def compute_logistic_loss(y, tx, w, lambda_): 
 
     pred = np.dot(tx, w)
     sigmoids = 1.0 / (1 + np.exp(-pred))
-    loss = -np.mean(y * np.log(sigmoids) + (1 - y) * np.log(1 - sigmoids))
+    loss = -np.mean(y * np.log(sigmoids) + (1 - y) * np.log(1 - sigmoids)) + (lambda_ ) * np.linalg.norm(w) ** 2
     return sigmoids, loss
-
 
 
 def logistic_regression(y, tx, initial_w, max_iters, gamma):
@@ -173,7 +166,7 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma):
     
     w = initial_w
 
-    sigmoids, loss = compute_logistic_loss(y, tx, w)
+    sigmoids, loss = compute_logistic_loss(y, tx, w, 0 )
     
     for iter in range(max_iters):
         # compute the gradient
@@ -183,9 +176,53 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma):
         # update w through the negative gradient direction
         w = w - gamma * grad
 
-        sigmoids, loss = compute_logistic_loss(y, tx, w)
+        sigmoids, loss = compute_logistic_loss(y, tx, w, 0)
         
     return w, loss
+
+
+
+def reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma):
+
+        
+    w = initial_w
+
+    sigmoids, loss = compute_logistic_loss(y, tx, w, 0 )
+    
+    for iter in range(max_iters):
+        # compute the gradient
+
+        grad =  tx.T.dot(sigmoids - y)/len(tx)
+
+        # update w through the negative gradient direction
+        w = w - gamma * grad
+
+        sigmoids, loss = compute_logistic_loss(y, tx, w, 0)
+        
+    return w, loss
+
+    # w = initial_w
+    
+    # pred = np.dot(tx, w)
+    # sigmoids = 1.0 / (1 + np.exp(-pred))
+    # loss = compute_logistic_loss(y, tx, w, 0)
+
+    
+    # for iter in range(max_iters):
+
+    #     # compute the gradient
+    #     grad = tx.T.dot(sigmoids - y)/len(y) + 2 * lambda_ * w
+
+    #     # update w through the negative gradient direction
+    #     w = w - gamma * grad
+
+    #     pred = np.dot(tx, w)
+    #     sigmoids = 1.0 / (1 + np.exp(-pred))
+    #     loss = compute_logistic_loss(y, tx, w, lambda_)
+        
+    
+    # return w, loss
+
 
 
 
