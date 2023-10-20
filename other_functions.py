@@ -131,7 +131,6 @@ def hyperparameter_tuning(X, y, model, lambdas, gammas, model_params,  k=5):
 
             model_params['lambda_'] = lambda_
             model_params['gamma'] = gamma
-            # model = model(X, y, k, **model_params)  # Construct model with the hyperparameter
             accuracy = k_fold_cross_validation(X, y, model, k, model_params)
             
             if accuracy > best_accuracy:
@@ -144,3 +143,24 @@ def hyperparameter_tuning(X, y, model, lambdas, gammas, model_params,  k=5):
     return best_param_lambda, best_param_gamma
 
  
+def compute_f1(y_true, y_pred):
+    # Ensure the two arrays are of the same length
+    assert y_true.shape[0] == y_pred.shape[0], "Mismatched length between y_true and y_pred."
+
+    # True Positives
+    TP = np.sum(np.logical_and(y_pred == 1, y_true == 1))
+
+    # False Positives
+    FP = np.sum(np.logical_and(y_pred == 1, y_true == 0))
+
+    # False Negatives
+    FN = np.sum(np.logical_and(y_pred == 0, y_true == 1))
+
+    # Precision and Recall
+    precision = TP / (TP + FP) if (TP + FP) != 0 else 0
+    recall = TP / (TP + FN) if (TP + FN) != 0 else 0
+
+    # F1 Score
+    f1 = 2 * (precision * recall) / (precision + recall) if (precision + recall) != 0 else 0
+
+    return f1
