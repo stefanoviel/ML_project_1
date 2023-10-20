@@ -30,3 +30,23 @@ lambda= 0.001 gamma= 0.1 , CV accuracy = 0.6952
 lambda= 0.01 gamma= 0.1 , CV accuracy = 0.6172
 lambda= 0.1 gamma= 0.1 , CV accuracy = 0.6120
 
+hyperparameter_tuning(x_data, y_data, reg_logistic_regression,lambdas= [0, 0.0001, 0.0005, 0.001] , gammas=[0.01, 0.03, 0.07, 0.1], model_params={'initial_w': initial_w ,'max_iters': 10000})
+size 10000
+
+lambda= 0 gamma= 0.01 , CV accuracy = 0.6561
+lambda= 0.0001 gamma= 0.01 , CV accuracy = 0.6629
+lambda= 0.0005 gamma= 0.01 , CV accuracy = 0.6598
+lambda= 0.001 gamma= 0.01 , CV accuracy = 0.6577
+lambda= 0 gamma= 0.03 , CV accuracy = 0.7460
+lambda= 0.0001 gamma= 0.03 , CV accuracy = 0.7371
+lambda= 0.0005 gamma= 0.03 , CV accuracy = 0.7243
+lambda= 0.001 gamma= 0.03 , CV accuracy = 0.7128
+lambda= 0 gamma= 0.07 , CV accuracy = 0.8214
+lambda= 0.0001 gamma= 0.07 , CV accuracy = 0.8096
+lambda= 0.0005 gamma= 0.07 , CV accuracy = 0.7840
+lambda= 0.001 gamma= 0.07 , CV accuracy = 0.7533
+lambda= 0 gamma= 0.1 , CV accuracy = 0.8536
+lambda= 0.0001 gamma= 0.1 , CV accuracy = 0.8398
+lambda= 0.0005 gamma= 0.1 , CV accuracy = 0.8070
+lambda= 0.001 gamma= 0.1 , CV accuracy = 0.7630
+
