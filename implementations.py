@@ -84,12 +84,6 @@ def mean_squared_error_sgd(y, tx, initial_w, max_iters, gamma):
     return weights, loss
 
 
-# print(mean_squared_error_sgd(
-#         y[:1], tx[:1], initial_w, MAX_ITERS, GAMMA
-#     ))
-
-
-
 def least_squares(y, tx):
     """Calculate the least squares solution.
        returns mse, and optimal weights.
@@ -194,4 +188,5 @@ def reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma):
         sigmoids, loss = compute_logistic_loss(y, tx, w)
         
     return w, loss
+
 
