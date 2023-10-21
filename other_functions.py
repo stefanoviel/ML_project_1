@@ -81,6 +81,7 @@ def k_fold_cross_validation(X, y, model, k, model_params):
     np.random.shuffle(indices)
     fold_size = num_samples // k
     accuracies = []
+    f1_scores = []
 
     for i in range(k):
         # Split data into train and test for this fold
@@ -97,12 +98,15 @@ def k_fold_cross_validation(X, y, model, k, model_params):
         
         # Calculate accuracy for this fold and append to accuracies list
         accuracy = np.mean(y_pred == y_test)
+        f1 = compute_f1(y_test, y_pred)
         accuracies.append(accuracy)
+        f1_scores.append(f1)
     
     # Calculate mean accuracy over all k-folds
     mean_accuracy = np.mean(accuracies)
+    f1_score = np.mean(f1_scores)
     
-    return mean_accuracy
+    return mean_accuracy, f1_score
 
 
 
@@ -123,6 +127,7 @@ def hyperparameter_tuning(X, y, model, lambdas, gammas, model_params,  k=5):
     - best_param_value: the value of the hyperparameter that gives the best cross-validation accuracy
     """
     best_accuracy = 0
+    best_f1_score = 0
     best_param_lambda = None
     best_param_gamma = None
     
@@ -131,14 +136,15 @@ def hyperparameter_tuning(X, y, model, lambdas, gammas, model_params,  k=5):
 
             model_params['lambda_'] = lambda_
             model_params['gamma'] = gamma
-            accuracy = k_fold_cross_validation(X, y, model, k, model_params)
+            accuracy, f1_score = k_fold_cross_validation(X, y, model, k, model_params)
             
-            if accuracy > best_accuracy:
+            if f1_score > best_f1_score and accuracy > best_accuracy:
                 best_accuracy = accuracy
+                best_f1_score = f1_score
                 best_param_lambda = lambda_
                 best_param_gamma = gamma
                 
-            print(f" lambda= {lambda_} gamma= {gamma} , CV accuracy = {accuracy:.4f}")
+            print(f" lambda= {lambda_} gamma= {gamma} , CV accuracy = {accuracy:.4f}, f1_score = {f1_score:.4f}")
         
     return best_param_lambda, best_param_gamma
 
@@ -164,3 +170,33 @@ def compute_f1(y_true, y_pred):
     f1 = 2 * (precision * recall) / (precision + recall) if (precision + recall) != 0 else 0
 
     return f1
+
+
+def balance_dataset(x_train, y_train):
+    indices_0 = np.where(y_train == 0)[0] # MAJORITY CLASS
+    indices_1 = np.where(y_train == 1)[0] # MINORITY CLASS
+
+    count_0 = len(indices_0)
+    count_1 = len(indices_1)
+
+    target_count = (count_0 + count_1) // 2  # find a middle ground to avoid extremely oversampling the minority class
+    #target_count = max(count_0, count_1)
+    #target_count = min(count_0, count_1)
+
+    oversampled_indices = np.random.choice(indices_1, size=target_count, replace=True)
+    oversampled_X = x_train[oversampled_indices]
+    oversampled_y = y_train[oversampled_indices]
+
+    undersampled_indices = np.random.choice(indices_0, size=target_count, replace=False)
+    undersampled_X = x_train[undersampled_indices]
+    undersampled_y = y_train[undersampled_indices]
+
+    balanced_X = np.vstack((undersampled_X, oversampled_X))
+    balanced_y = np.hstack((undersampled_y, oversampled_y))
+
+    balanced_data = np.column_stack((balanced_X, balanced_y))
+    np.random.shuffle(balanced_data)
+    shuffled_balanced_X = balanced_data[:, :-1]
+    shuffled_balanced_y = balanced_data[:, -1]
+
+    return shuffled_balanced_X, shuffled_balanced_y
