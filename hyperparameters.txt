@@ -1,5 +1,5 @@
-rows = 5000
 hyperparameter_tuning(x_data, y_data, reg_logistic_regression,lambdas=[0.0001, 0.001, 0.01, 0.1] , gammas=[0.01, 0.02, 0.05, 0.01, 0.03, 0.07, 0.1], model_params={'initial_w': initial_w ,'max_iters': 5000})
+size 5000
 
 lambda= 0.0001 gamma= 0.01 , CV accuracy = 0.6076
 lambda= 0.001 gamma= 0.01 , CV accuracy = 0.6050
@@ -50,3 +50,69 @@ lambda= 0.0001 gamma= 0.1 , CV accuracy = 0.8398
 lambda= 0.0005 gamma= 0.1 , CV accuracy = 0.8070
 lambda= 0.001 gamma= 0.1 , CV accuracy = 0.7630
 
+hyperparameter_tuning(x_data, y_data, reg_logistic_regression,lambdas= [0, 0.0001, 0.0005, 0.001] , gammas=[0.01, 0.03, 0.07, 0.1], model_params={'initial_w': initial_w ,'max_iters': 10000})
+size 5000
+
+lambda= 0 gamma= 0.01 , CV accuracy = 0.6434, f1_score = 0.2912
+lambda= 0.0001 gamma= 0.01 , CV accuracy = 0.6392, f1_score = 0.2857
+lambda= 0.0005 gamma= 0.01 , CV accuracy = 0.6292, f1_score = 0.2798
+lambda= 0.001 gamma= 0.01 , CV accuracy = 0.6342, f1_score = 0.2894
+lambda= 0 gamma= 0.03 , CV accuracy = 0.7026, f1_score = 0.3156
+lambda= 0.0001 gamma= 0.03 , CV accuracy = 0.7062, f1_score = 0.3200
+lambda= 0.0005 gamma= 0.03 , CV accuracy = 0.6948, f1_score = 0.3095
+lambda= 0.001 gamma= 0.03 , CV accuracy = 0.6812, f1_score = 0.3100
+lambda= 0 gamma= 0.07 , CV accuracy = 0.7864, f1_score = 0.3524
+lambda= 0.0001 gamma= 0.07 , CV accuracy = 0.7882, f1_score = 0.3551
+lambda= 0.0005 gamma= 0.07 , CV accuracy = 0.7624, f1_score = 0.3540
+lambda= 0.001 gamma= 0.07 , CV accuracy = 0.7116, f1_score = 0.3191
+lambda= 0 gamma= 0.1 , CV accuracy = 0.8284, f1_score = 0.3669
+lambda= 0.0001 gamma= 0.1 , CV accuracy = 0.8156, f1_score = 0.3607
+lambda= 0.0005 gamma= 0.1 , CV accuracy = 0.7650, f1_score = 0.3370
+lambda= 0.001 gamma= 0.1 , CV accuracy = 0.7354, f1_score = 0.3258
+
+
+hyperparameter_tuning(x_balanced, y_balanced, reg_logistic_regression,lambdas= [0, 0.0001, 0.0005, 0.001] , gammas=[0.01, 0.03, 0.07, 0.1], model_params={'initial_w': initial_w ,'max_iters': 10000})
+size 5000 oversampling
+
+ lambda= 0 gamma= 0.01 , CV accuracy = 0.7864, f1_score = 0.8184
+ lambda= 0.0001 gamma= 0.01 , CV accuracy = 0.7888, f1_score = 0.8204
+ lambda= 0.0005 gamma= 0.01 , CV accuracy = 0.7922, f1_score = 0.8226
+ lambda= 0.001 gamma= 0.01 , CV accuracy = 0.7818, f1_score = 0.8160
+ lambda= 0 gamma= 0.03 , CV accuracy = 0.7986, f1_score = 0.8276
+ lambda= 0.0001 gamma= 0.03 , CV accuracy = 0.7908, f1_score = 0.8207
+ lambda= 0.0005 gamma= 0.03 , CV accuracy = 0.7920, f1_score = 0.8224
+ lambda= 0.001 gamma= 0.03 , CV accuracy = 0.7924, f1_score = 0.8231
+ lambda= 0 gamma= 0.07 , CV accuracy = 0.8076, f1_score = 0.8324
+ lambda= 0.0001 gamma= 0.07 , CV accuracy = 0.8048, f1_score = 0.8307
+ lambda= 0.0005 gamma= 0.07 , CV accuracy = 0.7914, f1_score = 0.8202
+ lambda= 0.001 gamma= 0.07 , CV accuracy = 0.7966, f1_score = 0.8261
+ lambda= 0 gamma= 0.1 , CV accuracy = 0.8134, f1_score = 0.8348
+ lambda= 0.0001 gamma= 0.1 , CV accuracy = 0.8052, f1_score = 0.8305
+ lambda= 0.0005 gamma= 0.1 , CV accuracy = 0.8030, f1_score = 0.8299
+ lambda= 0.001 gamma= 0.1 , CV accuracy = 0.7950, f1_score = 0.8243
+
+hyperparameter_tuning(x_balanced, y_balanced, reg_logistic_regression,lambdas= [0, 0.0001, 0.00001] , gammas=[0.01, 0.03, 0.07, 0.1], model_params={'initial_w': initial_w ,'max_iters': 10000})
+size 10000
+
+ lambda= 0 gamma= 0.01 , CV accuracy = 0.6623, f1_score = 0.2987
+ lambda= 0.0001 gamma= 0.01 , CV accuracy = 0.6626, f1_score = 0.2948
+ lambda= 1e-05 gamma= 0.01 , CV accuracy = 0.6610, f1_score = 0.2987
+ lambda= 0 gamma= 0.03 , CV accuracy = 0.7303, f1_score = 0.3356
+ lambda= 0.0001 gamma= 0.03 , CV accuracy = 0.7287, f1_score = 0.3316
+ lambda= 1e-05 gamma= 0.03 , CV accuracy = 0.7348, f1_score = 0.3371
+ lambda= 0 gamma= 0.07 , CV accuracy = 0.8201, f1_score = 0.3797
+ lambda= 0.0001 gamma= 0.07 , CV accuracy = 0.8139, f1_score = 0.3737
+ lambda= 1e-05 gamma= 0.07 , CV accuracy = 0.8203, f1_score = 0.3732
+ lambda= 0 gamma= 0.1 , CV accuracy = 0.8486, f1_score = 0.3778
+ lambda= 0.0001 gamma= 0.1 , CV accuracy = 0.8408, f1_score = 0.3787
+ lambda= 1e-05 gamma= 0.1 , CV accuracy = 0.8499, f1_score = 0.3833
+
+
+ size 10000 x_balanced
+
+lambda= 0 gamma= 0.01 , CV accuracy = 0.7632, f1_score = 0.7985
+lambda= 0.0001 gamma= 0.01 , CV accuracy = 0.7645, f1_score = 0.7990
+lambda= 1e-05 gamma= 0.01 , CV accuracy = 0.7628, f1_score = 0.7975
+lambda= 0 gamma= 0.1 , CV accuracy = 0.7750, f1_score = 0.8040
+lambda= 0.0001 gamma= 0.1 , CV accuracy = 0.7754, f1_score = 0.8047
+lambda= 1e-05 gamma= 0.1 , CV accuracy = 0.7778, f1_score = 0.8066

@@ -200,3 +200,68 @@ def balance_dataset(x_train, y_train):
     shuffled_balanced_y = balanced_data[:, -1]
 
     return shuffled_balanced_X, shuffled_balanced_y
+
+
+def clean_X_0(data):
+    data = data[:, 1:]  
+    data[np.isnan(data)] = 0  
+    data = normalize(data)  
+    ones_column = np.ones((data.shape[0], 1))
+    return np.hstack((ones_column, data))
+
+def clean_X_mean(data):
+    data = data[:, 1:]  
+    column_means = np.nanmean(data, axis=0)
+    data[np.isnan(data)] = np.take(column_means, np.where(np.isnan(data))[1])
+    data = normalize(data)  
+    ones_column = np.ones((data.shape[0], 1))
+    return np.hstack((ones_column, data))
+
+def clean_X_median(x_data):
+    x_data = x_data[:, 1:]  
+    column_medians = np.nanmedian(x_data, axis=0)
+    x_data[np.isnan(x_data)] = np.take(column_medians, np.where(np.isnan(x_data))[1])
+    x_data = normalize(x_data)  
+    return x_data
+
+def clean_Y(y_data): 
+    y_data = y_data[:, 1]  # remove ids
+    y_data[y_data == -1] = 0  # set -1 to 0 
+    return y_data
+
+
+def columns_to_remove(x_data,t):
+    remove = np.array([])
+
+    for j in range(x_data.shape[1]):   
+        # focus: columns with too many nan values
+        num_nan = np.sum(np.isnan(x_data[:,j]))
+        per_nan = num_nan / x_data.shape[0]
+        
+        # focus: columns with too many 77/99 values
+        num_2729 = np.sum(x_data[:,j] == 77) + np.sum(x_data[:,j] == 99)
+        per_2729 = num_2729 / x_data.shape[0]
+        
+        # focus: columns with too many 77/99 values
+        num_3739 = np.sum(x_data[:,j] == 777) + np.sum(x_data[:,j] == 999)
+        per_3739 = num_3739 / x_data.shape[0]
+
+        # focus: columns with too many 7777/9999 values
+        num_4749 = np.sum(x_data[:,j] == 7777) + np.sum(x_data[:,j] == 9999)
+        per_4749 = num_4749 / x_data.shape[0]
+
+        # focus: columns with too many 777777/999999 values
+        num_6769 = np.sum(x_data[:,j] == 777777) + np.sum(x_data[:,j] == 999999)
+        per_6769 = num_6769 / x_data.shape[0]
+
+        # find out which features to remove
+        num_remove = num_nan + num_2729 + num_3739 + num_4749 + num_6769
+        per_remove = num_remove / x_data.shape[0]
+        if ( per_remove >= t ):
+            remove = np.append(remove,j)
+            
+    return remove.astype(int)
+
+def reduced_data(x_data, t=0.6):
+    filtered_data = np.delete(x_data, columns_to_remove(x_data, t), 1)
+    return filtered_data
