@@ -41,8 +41,8 @@ def split_data(x, y, ratio, seed=1):
     return x_shuffle[: split_pos], x_shuffle[split_pos:], y_shuffle[:split_pos], y_shuffle[split_pos:],
 
 
-def predict_logistic(X, w): 
-    return (sigmoid(X @ w) >= 0.5).flatten()
+def predict_logistic(X, w, threshold): 
+    return (sigmoid(X @ w) >= threshold).flatten()
 
 def normalize(data):
     """
@@ -62,7 +62,7 @@ def normalize(data):
 
 
 
-def k_fold_cross_validation(X, y, model, k, model_params):
+def k_fold_cross_validation(X, y, model, k, model_params, threshold):
     """
     Perform k-fold cross-validation.
 
@@ -94,7 +94,7 @@ def k_fold_cross_validation(X, y, model, k, model_params):
         # Fit model and predict
         w, loss = model(y_train, X_train, **model_params)
         
-        y_pred = predict_logistic(X_test, w)
+        y_pred = predict_logistic(X_test, w, threshold)
         
         # Calculate accuracy for this fold and append to accuracies list
         accuracy = np.mean(y_pred == y_test)
@@ -111,7 +111,7 @@ def k_fold_cross_validation(X, y, model, k, model_params):
 
 
 
-def hyperparameter_tuning(X, y, model, lambdas, gammas, model_params,  k=5):
+def hyperparameter_tuning(X, y, model, lambdas, gammas, thresholds, model_params,  k=5):
     """
     Tune hyperparameter using k-fold cross-validation.
 
@@ -130,23 +130,27 @@ def hyperparameter_tuning(X, y, model, lambdas, gammas, model_params,  k=5):
     best_f1_score = 0
     best_param_lambda = None
     best_param_gamma = None
+    best_param_threshold = None
     
     for gamma in gammas: 
         for lambda_ in lambdas: 
+            for threshold in thresholds: 
 
-            model_params['lambda_'] = lambda_
-            model_params['gamma'] = gamma
-            accuracy, f1_score = k_fold_cross_validation(X, y, model, k, model_params)
-            
-            if f1_score > best_f1_score and accuracy > best_accuracy:
-                best_accuracy = accuracy
-                best_f1_score = f1_score
-                best_param_lambda = lambda_
-                best_param_gamma = gamma
+
+                model_params['lambda_'] = lambda_
+                model_params['gamma'] = gamma
+                accuracy, f1_score = k_fold_cross_validation(X, y, model, k, model_params, threshold)
                 
-            print(f" lambda= {lambda_} gamma= {gamma} , CV accuracy = {accuracy:.4f}, f1_score = {f1_score:.4f}")
+                if f1_score > best_f1_score and accuracy > best_accuracy:
+                    best_accuracy = accuracy
+                    best_f1_score = f1_score
+                    best_param_lambda = lambda_
+                    best_param_gamma = gamma
+                    best_param_threshold = threshold
+                    
+                print(f" lambda= {lambda_}, gamma= {gamma}, threshold = {threshold} CV accuracy = {accuracy:.4f}, f1_score = {f1_score:.4f}")
         
-    return best_param_lambda, best_param_gamma
+    return best_param_lambda, best_param_gamma, best_param_threshold
 
  
 def compute_f1(y_true, y_pred):
