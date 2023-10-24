@@ -111,7 +111,7 @@ def k_fold_cross_validation(X, y, model, k, model_params, threshold):
 
 
 
-def hyperparameter_tuning(X, y, model, lambdas, gammas, thresholds, model_params,  k=5):
+def hyperparameter_tuning(X, y, model, lambdas, gammas, batch_sizes, thresholds, model_params,  k=5):
     """
     Tune hyperparameter using k-fold cross-validation.
 
@@ -135,22 +135,25 @@ def hyperparameter_tuning(X, y, model, lambdas, gammas, thresholds, model_params
     for gamma in gammas: 
         for lambda_ in lambdas: 
             for threshold in thresholds: 
+                for batch_size in batch_sizes: 
 
-
-                model_params['lambda_'] = lambda_
-                model_params['gamma'] = gamma
-                accuracy, f1_score = k_fold_cross_validation(X, y, model, k, model_params, threshold)
-                
-                if f1_score > best_f1_score and accuracy > best_accuracy:
-                    best_accuracy = accuracy
-                    best_f1_score = f1_score
-                    best_param_lambda = lambda_
-                    best_param_gamma = gamma
-                    best_param_threshold = threshold
+                    model_params['lambda_'] = lambda_
+                    model_params['gamma'] = gamma
+                    model_params['batch_size'] = batch_size
+                    accuracy, f1_score = k_fold_cross_validation(X, y, model, k, model_params, threshold)
                     
-                print(f" lambda= {lambda_}, gamma= {gamma}, threshold = {threshold} CV accuracy = {accuracy:.4f}, f1_score = {f1_score:.4f}")
+                    if f1_score > best_f1_score and accuracy > best_accuracy:
+                        best_accuracy = accuracy
+                        best_f1_score = f1_score
+                        best_param_lambda = lambda_
+                        best_param_gamma = gamma
+                        best_param_threshold = threshold
+                        best_batch_size = batch_size
+                    
+
+                    print(f" lambda= {lambda_}, gamma= {gamma}, batch_size = {batch_size}, threshold = {threshold} CV accuracy = {accuracy:.4f}, f1_score = {f1_score:.4f}")
         
-    return best_param_lambda, best_param_gamma, best_param_threshold
+    return best_param_lambda, best_param_gamma, best_param_threshold, best_batch_size
 
  
 def compute_f1(y_true, y_pred):
@@ -269,3 +272,24 @@ def columns_to_remove(x_data,t):
 def reduced_data(x_data, t=0.6):
     filtered_data = np.delete(x_data, columns_to_remove(x_data, t), 1)
     return filtered_data
+
+
+def reg_logistic_regression_batch(y, tx, initial_w, lambda_, max_iters, gamma, batch_size):
+    half = False
+    w = initial_w
+    losses = []
+    for _ in range(max_iters):
+        random_indices = np.random.choice(len(y), size=batch_size, replace=False)
+        batch_tx = tx[random_indices]
+        batch_y = y[random_indices]
+        sigmoids, loss = compute_logistic_loss(batch_y, batch_tx, w)
+        grad = batch_tx.T.dot(sigmoids - batch_y) / batch_size + 2 * lambda_ * w
+        w = w - gamma * grad #weighted_grad / len(y)  # check if dividing actually makes sense
+        losses.append(loss)
+        if len(losses) > 2 and np.abs(losses[-2] - losses[-1]) < 1e-3 and not half: 
+            half = True
+            gamma = gamma/2
+        elif len(losses) > 2 and np.abs(losses[-2] - losses[-1]) < 1e-5: 
+            break
+        
+    return w, losses
