@@ -62,7 +62,7 @@ def normalize(data):
 
 
 
-def k_fold_cross_validation(X, y, model, k, model_params, threshold):
+def k_fold_cross_validation(X, y, model, k, model_params, threshold= 0.5):
     """
     Perform k-fold cross-validation.
 
@@ -134,26 +134,22 @@ def hyperparameter_tuning(X, y, model, lambdas, gammas, batch_sizes, thresholds,
     
     for gamma in gammas: 
         for lambda_ in lambdas: 
-            for threshold in thresholds: 
-                for batch_size in batch_sizes: 
 
-                    model_params['lambda_'] = lambda_
-                    model_params['gamma'] = gamma
-                    model_params['batch_size'] = batch_size
-                    accuracy, f1_score = k_fold_cross_validation(X, y, model, k, model_params, threshold)
-                    
-                    if f1_score > best_f1_score and accuracy > best_accuracy:
-                        best_accuracy = accuracy
-                        best_f1_score = f1_score
-                        best_param_lambda = lambda_
-                        best_param_gamma = gamma
-                        best_param_threshold = threshold
-                        best_batch_size = batch_size
-                    
 
-                    print(f" lambda= {lambda_}, gamma= {gamma}, batch_size = {batch_size}, threshold = {threshold} CV accuracy = {accuracy:.4f}, f1_score = {f1_score:.4f}")
+            model_params['lambda_'] = lambda_
+            model_params['gamma'] = gamma
+            accuracy, f1_score = k_fold_cross_validation(X, y, model, k, model_params)
+            
+            if f1_score > best_f1_score and accuracy > best_accuracy:
+                best_accuracy = accuracy
+                best_f1_score = f1_score
+                best_param_lambda = lambda_
+                best_param_gamma = gamma
+            
+
+            print(f" lambda= {lambda_}, gamma= {gamma}, CV accuracy = {accuracy:.4f}, f1_score = {f1_score:.4f}")
         
-    return best_param_lambda, best_param_gamma, best_param_threshold, best_batch_size
+    return best_param_lambda, best_param_gamma, best_param_threshold
 
  
 def compute_f1(y_true, y_pred):

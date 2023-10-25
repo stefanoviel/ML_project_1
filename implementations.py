@@ -189,17 +189,3 @@ def reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma):
         
     return w, loss
 
-
-def reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma):
-
-        
-    w = initial_w
-    sigmoids, loss = compute_logistic_loss(y, tx, w)
-    
-    for iter in range(max_iters):
-        grad = tx.T.dot(sigmoids - y)/len(y) + 2 * lambda_ * w
-        w = w - gamma * grad
-        sigmoids, loss = compute_logistic_loss(y, tx, w)
-        
-    return w, loss
-
