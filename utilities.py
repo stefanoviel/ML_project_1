@@ -293,3 +293,37 @@ def reg_logistic_regression_batch(y, tx, initial_w, lambda_, max_iters, gamma, b
             break
         
     return w, losses
+
+
+
+
+def drop_highly_correlated_features(data, threshold=0.95):
+    """
+    Drops columns in a numpy array that are highly correlated with others.
+    
+    Parameters:
+    - data: A numpy array.
+    - threshold: Correlation threshold above which columns are dropped.
+    
+    Returns:
+    - A numpy array with highly correlated columns removed.
+    """
+    
+    # Calculate the correlation matrix
+    corr_matrix = np.corrcoef(data, rowvar=False)
+    
+    # Create a mask of size equal to the number of features in data
+    drop_cols = np.zeros(corr_matrix.shape[0], dtype=bool)
+    
+    # For each feature, check if it's correlated with another feature more than the threshold
+    for i in range(corr_matrix.shape[0]):
+        for j in range(i+1, corr_matrix.shape[0]):
+            if abs(corr_matrix[i, j]) > threshold:
+                drop_cols[j] = True
+                
+    # Return the data with the columns to drop removed
+    return data[:, ~drop_cols]
+
+# Usage example:
+# data = np.random.rand(100, 5)
+# reduced_data = drop_highly_correlated_features
