@@ -318,11 +318,7 @@ def calculate_metrics(y_true, y_pred):
             
     return TP, FP, TN, FN
 
-# Example usage
-# y_true = [1, 0, 1, 1, 0]
-# y_pred = [1, 0, 1, 0, 1]
-# TP, FP, TN, FN = calculate_metrics(y_true, y_pred)
-# print("TP:", TP, "FP:", FP, "TN:", TN, "FN:",
+
 
 
 
