@@ -124,14 +124,29 @@ def ridge_regression(y, tx, lambda_):
     return w, mse
 
 
-def sigmoid(t):
-    """Apply the logistic function."""
-    return 1.0 / (1 + np.exp(-t))
+def sigmoid(x):
+    """Apply the logistic function.
+    Args:
+        x: numpy array of shape (N,), input to sigmoid function
+
+    Returns: 
+        sigmoid function
+    """
+    return 1.0 / (1 + np.exp(-x))
 
     
-def compute_logistic_loss(y, tx, w): 
+def compute_logistic_loss(y, tx, weights): 
+    """
+    Computes sigmoids and loss considering the current weights. 
+    y: np.array
+        The target values
+    tx: np.array
+        The data matrix (each row is a data point)
+    weights: np.array
+        Current model weights
+    """
 
-    pred = tx@w
+    pred = tx @ weights
     sigmoids = 1.0 / (1 + np.exp(-pred))
     loss = -np.mean(y * np.log(sigmoids) + (1 - y) * np.log(1 - sigmoids)) 
     return sigmoids, loss
@@ -156,6 +171,8 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma):
     Returns:
     w: np.array
         Optimized weights after training
+    loss: float
+        Final loss after training on the training set 
     """
     
     w = initial_w
@@ -165,10 +182,10 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma):
     for iter in range(max_iters):
         # compute the gradient
 
-        grad =  tx.T.dot(sigmoids - y)/len(tx)
+        gradient =  tx.T.dot(sigmoids - y)/len(tx)
 
         # update w through the negative gradient direction
-        w = w - gamma * grad
+        w = w - gamma * gradient
 
         sigmoids, loss = compute_logistic_loss(y, tx, w)
         
@@ -177,15 +194,37 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma):
 
 
 def reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma):
-
-        
-    w = initial_w
-    sigmoids, loss = compute_logistic_loss(y, tx, w)
+    """
+    Perform regularized logistic regression using gradient descent.
     
-    for iter in range(max_iters):
-        grad = tx.T.dot(sigmoids - y)/len(y) + 2 * lambda_ * w
-        w = w - gamma * grad
-        sigmoids, loss = compute_logistic_loss(y, tx, w)
+    Parameters:
+    y: np.array
+        The target values
+    tx: np.array
+        The data matrix (each row is a data point)
+    lambda_: float
+        Regularization parameter
+    initial_w: np.array
+        Initial weights
+    max_iters: int
+        Maximum number of iterations for gradient descent
+    gamma: float
+        Learning rate
+
+    Returns:
+    w: np.array
+        Optimized weights after training
+    loss: float
+        Final loss after training on the training set 
+    """
+
+    w = initial_w
+    sigmoids, loss = compute_logistic_loss(y, tx, w)  # compute sigmoids and loss for 0 iteration
+    
+    for _ in range(max_iters):
+        gradient = tx.T.dot(sigmoids - y)/len(y) + 2 * lambda_ * w  # compute gradient
+        w = w - gamma * gradient  # update weights
+        sigmoids, loss = compute_logistic_loss(y, tx, w)  
         
     return w, loss
 

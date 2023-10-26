@@ -111,7 +111,7 @@ def k_fold_cross_validation(X, y, model, k, model_params, threshold= 0.5):
 
 
 
-def hyperparameter_tuning(X, y, model, lambdas, gammas, batch_sizes, thresholds, model_params,  k=5):
+def hyperparameter_tuning(X, y, model, lambdas, gammas, model_params,  k=5):
     """
     Tune hyperparameter using k-fold cross-validation.
 
@@ -130,7 +130,6 @@ def hyperparameter_tuning(X, y, model, lambdas, gammas, batch_sizes, thresholds,
     best_f1_score = 0
     best_param_lambda = None
     best_param_gamma = None
-    best_param_threshold = None
     
     for gamma in gammas: 
         for lambda_ in lambdas: 
@@ -149,7 +148,7 @@ def hyperparameter_tuning(X, y, model, lambdas, gammas, batch_sizes, thresholds,
 
             print(f" lambda= {lambda_}, gamma= {gamma}, CV accuracy = {accuracy:.4f}, f1_score = {f1_score:.4f}")
         
-    return best_param_lambda, best_param_gamma, best_param_threshold
+    return best_param_lambda, best_param_gamma
 
  
 def compute_f1(y_true, y_pred):
@@ -206,31 +205,36 @@ def balance_dataset(x_train, y_train):
 
 
 def clean_X_0(data):
-    data = data[:, 1:]  
-    data[np.isnan(data)] = 0  
-    data = normalize(data)  
-    ones_column = np.ones((data.shape[0], 1))
-    return np.hstack((ones_column, data))
+    data_copied = np.array(data)
+    data_copied = data_copied[:, 1:]  
+    data_copied[np.isnan(data_copied)] = 0  
+    data_copied = normalize(data_copied)  
+    ones_column = np.ones((data_copied.shape[0], 1))
+    return np.hstack((ones_column, data_copied))
 
 def clean_X_mean(data):
-    data = data[:, 1:]  
-    column_means = np.nanmean(data, axis=0)
-    data[np.isnan(data)] = np.take(column_means, np.where(np.isnan(data))[1])
-    data = normalize(data)  
-    ones_column = np.ones((data.shape[0], 1))
-    return np.hstack((ones_column, data))
+    
+    data_copied = np.array(data)
+    data_copied = data_copied[:, 1:]  
+    column_means = np.nanmean(data_copied, axis=0)
+    data_copied[np.isnan(data_copied)] = np.take(column_means, np.where(np.isnan(data_copied))[1])
+    data_copied = normalize(data_copied)  
+    ones_column = np.ones((data_copied.shape[0], 1))
+    return np.hstack((ones_column, data_copied))
 
-def clean_X_median(x_data):
-    x_data = x_data[:, 1:]  
-    column_medians = np.nanmedian(x_data, axis=0)
-    x_data[np.isnan(x_data)] = np.take(column_medians, np.where(np.isnan(x_data))[1])
-    x_data = normalize(x_data)  
-    return x_data
+def clean_X_median(data):
+    data_copied = np.array(data)
+    data_copied = data_copied[:, 1:]  
+    column_medians = np.nanmedian(data_copied, axis=0)
+    data_copied[np.isnan(data_copied)] = np.take(column_medians, np.where(np.isnan(data_copied))[1])
+    data_copied = normalize(data_copied)  
+    return data_copied
 
 def clean_Y(y_data): 
-    y_data = y_data[:, 1]  # remove ids
-    y_data[y_data == -1] = 0  # set -1 to 0 
-    return y_data
+    y_data_copied = np.array(y_data)
+    y_data_copied = y_data_copied[:, 1]  # remove ids
+    y_data_copied[y_data_copied == -1] = 0  # set -1 to 0 
+    return y_data_copied
 
 
 def columns_to_remove(x_data,t):
