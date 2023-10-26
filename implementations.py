@@ -3,7 +3,6 @@ import random
 import numpy as np
 
 
-
 def compute_mse(y, tx, w):
     """Calculate the loss using either MSE.
 
