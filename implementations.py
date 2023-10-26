@@ -67,18 +67,15 @@ def mean_squared_error_sgd(y, tx, initial_w, max_iters, gamma):
         ws: a list of length max_iters containing the model parameters as numpy arrays of shape (2, ), for each iteration of SGD
     """
 
-    weights = initial_w.reshape(-1, 1)
+    weights = initial_w
     loss = compute_mse(y, tx, weights)
 
     for n_iter in range(max_iters):
         n = random.randint(0, len(tx) - 1)
         gradient = (- tx[n] * (y[n] - tx[n] @ weights)) # compute gradient
 
-        gradient = np.reshape(gradient, (-1, 1))
-        
         weights = weights - gamma*gradient # update weights
         loss = compute_mse(y, tx, weights)
-
 
     return weights, loss
 
