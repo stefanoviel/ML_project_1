@@ -292,6 +292,39 @@ def reg_logistic_regression_batch(y, tx, initial_w, lambda_, max_iters, gamma, b
 
 
 
+def calculate_metrics(y_true, y_pred):
+    """
+    Calculate TP, FP, TN, and FN for binary classification.
+    
+    Parameters:
+    - y_true: list of true labels (0 or 1)
+    - y_pred: list of predicted labels (0 or 1)
+
+    Returns:
+    - TP, FP, TN, FN
+    """
+    
+    TP = FP = TN = FN = 0
+    
+    for yt, yp in zip(y_true, y_pred):
+        if yt == 1 and yp == 1:
+            TP += 1
+        elif yt == 0 and yp == 1:
+            FP += 1
+        elif yt == 1 and yp == 0:
+            FN += 1
+        elif yt == 0 and yp == 0:
+            TN += 1
+            
+    return TP, FP, TN, FN
+
+# Example usage
+# y_true = [1, 0, 1, 1, 0]
+# y_pred = [1, 0, 1, 0, 1]
+# TP, FP, TN, FN = calculate_metrics(y_true, y_pred)
+# print("TP:", TP, "FP:", FP, "TN:", TN, "FN:",
+
+
 
 def drop_highly_correlated_features(data, threshold=0.95):
     """
