@@ -67,7 +67,7 @@ def mean_squared_error_sgd(y, tx, initial_w, max_iters, gamma):
         ws: a list of length max_iters containing the model parameters as numpy arrays of shape (2, ), for each iteration of SGD
     """
 
-    weights = initial_w
+    weights = initial_w.reshape(-1, 1)
     loss = compute_mse(y, tx, weights)
 
     for n_iter in range(max_iters):
@@ -81,6 +81,8 @@ def mean_squared_error_sgd(y, tx, initial_w, max_iters, gamma):
 
 
     return weights, loss
+
+
 
 
 def least_squares(y, tx):
