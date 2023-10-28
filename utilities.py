@@ -47,6 +47,16 @@ def split_data(x, y, ratio, seed=1):
 
 
 def predict_logistic(X, w, threshold):
+    """ BInary prediction on data
+
+    Args:
+        X np.array (D,): samples on which we want to predict
+        w np.array (N,D): weights of the logistic model
+        threshold int : threshold to change 
+
+    Returns:
+        _type_: _description_
+    """
     return (sigmoid(X @ w) >= threshold).flatten()
 
 
