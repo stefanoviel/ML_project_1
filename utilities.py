@@ -150,7 +150,7 @@ def hyperparameter_tuning(X, y, model, lambdas, gammas, model_params, k=5):
             model_params["gamma"] = gamma
             accuracy, f1_score = k_fold_cross_validation(X, y, model, k, model_params)
 
-            if f1_score > best_f1_score and accuracy > best_accuracy:
+            if f1_score >= best_f1_score and accuracy >= best_accuracy:
                 best_accuracy = accuracy
                 best_f1_score = f1_score
                 best_param_lambda = lambda_
@@ -383,7 +383,3 @@ def drop_highly_correlated_features(data, threshold=0.95):
 def drop_test_correlated_features(x_test, drop_cols): 
     return x_test[:, ~drop_cols]
 
-
-# Usage example:
-# data = np.random.rand(100, 5)
-# reduced_data = drop_highly_correlated_features
