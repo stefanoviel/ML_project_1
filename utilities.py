@@ -378,7 +378,10 @@ def drop_highly_correlated_features(data, threshold=0.95):
                 drop_cols[j] = True
 
     # Return the data with the columns to drop removed
-    return data[:, ~drop_cols]
+    return data[:, ~drop_cols], drop_cols
+
+def drop_test_correlated_features(x_test, drop_cols): 
+    return x_test[:, ~drop_cols]
 
 
 # Usage example:
